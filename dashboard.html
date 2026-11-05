@@ -6,15 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bat Expertise Manager - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <header>
+    <header class="entete">
         <h1>BAT EXPERTISE</h1>
     </header>
 
-    <nav>
+    <div class="organisation">
+
+    <nav class="menu">
         <ul>
             <li><a href="dashboard.html">Tableau de bord</a></li>
             <li><a href="clients.html">Clients</a></li>
@@ -25,24 +28,24 @@
         </ul>
     </nav>
 
-    <main>
+    <main class="contenu">
         <h2>Tableau de bord</h2>
         <p>Vue d'ensemble des dossiers</p>
 
-        <section>
+        <section class="statistiques">
             <h3>Statistiques</h3>
 
-            <article>
+            <article class="carte">
                 <h4>6</h4>
                 <p>Total dossiers</p>
             </article>
 
-            <article>
+            <article class="carte">
                 <h4>3</h4>
                 <p>En cours</p>
             </article>
 
-            <article>
+            <article class="carte">
                 <h4>2</h4>
                 <p>Terminés</p>
             </article>
@@ -51,7 +54,7 @@
         <section>
             <h3>Derniers dossiers</h3>
 
-            <table border="1">
+            <table class="tableau">
                 <thead>
                     <tr>
                         <th>Référence</th>
@@ -95,6 +98,7 @@
             </table>
         </section>
     </main>
+    </div>
 
 </body>
 </html>
