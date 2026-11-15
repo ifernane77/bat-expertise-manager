@@ -140,3 +140,44 @@ button {
 button:hover {
     background-color: #2d527d;
 }
+
+
+/* Adaptation aux écrans de 768px ou moins */
+@media (max-width: 768px) {
+
+    .organisation {
+        flex-direction: column;
+    }
+
+    .menu {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .menu ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 0;
+        list-style: none;
+    }
+
+    .contenu {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 15px;
+    }
+
+    .tableau {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .carte {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+}
