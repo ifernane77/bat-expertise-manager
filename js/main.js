@@ -28,13 +28,10 @@ const listeClients = document.getElementById("liste-clients");
 // Vérifier si nous sommes sur la page Clients
 if (listeClients) {
 
-    // Parcourir tous les clients
-    clients.forEach(function(client) {
-
-        // Créer une ligne dans le tableau
+        // Construire et afficher la ligne d'un client
+    function afficherClient(client) {
         const ligne = document.createElement("tr");
 
-        // Créer les quatre cellules
         const valeurs = [
             client.id,
             client.nom,
@@ -48,9 +45,67 @@ if (listeClients) {
             ligne.appendChild(cellule);
         });
 
-        // Ajouter la ligne au tableau HTML
         listeClients.appendChild(ligne);
+    }
 
+    // Afficher les clients présents au chargement
+    clients.forEach(function(client) {
+        afficherClient(client);
     });
+
+        // Récupérer le bouton et le formulaire
+    const boutonAjouterClient =
+        document.getElementById("bouton-ajouter-client");
+
+    const formulaireClient =
+        document.getElementById("formulaire-client");
+
+    // Afficher le formulaire au clic
+    boutonAjouterClient.addEventListener("click", function() {
+        formulaireClient.hidden = false;
+        document.getElementById("nom-client").focus();
+    });
+
+        // Réagir à la validation du formulaire
+    formulaireClient.addEventListener("submit", function(evenement) {
+        // Empêcher le rechargement de la page
+        evenement.preventDefault();
+
+        // Lire les valeurs saisies
+        const nom =
+            document.getElementById("nom-client").value.trim();
+
+        const email =
+            document.getElementById("email-client").value.trim();
+
+        const telephone =
+            document.getElementById("telephone-client").value.trim();
+
+        // Refuser les champs contenant uniquement des espaces
+        if (nom === "" || email === "" || telephone === "") {
+            alert("Merci de remplir tous les champs.");
+            return;
+        }
+
+        // Préparer le nouveau client
+        const nouveauClient = {
+            id: clients.length + 1,
+            nom: nom,
+            email: email,
+            telephone: telephone
+        };
+
+        // Ajouter le client aux données et à l'affichage
+        clients.push(nouveauClient);
+        afficherClient(nouveauClient);
+
+        // Vider et masquer le formulaire
+        formulaireClient.reset();
+        formulaireClient.hidden = true;
+
+        // Revenir au bouton d'ajout
+        boutonAjouterClient.focus();
+    });
+
 }
 

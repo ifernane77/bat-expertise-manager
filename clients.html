@@ -31,7 +31,30 @@
         <section>
           <h3>Clients enregistrés</h3>
 
-          <button type="button">Ajouter un client</button>
+          <button type="button" id="bouton-ajouter-client">
+            Ajouter un client
+          </button>
+
+          <form id="formulaire-client" hidden>
+            <h3>Nouveau client</h3>
+
+            <p>
+              <label for="nom-client">Nom :</label>
+              <input type="text" id="nom-client" required />
+            </p>
+
+            <p>
+              <label for="email-client">Email :</label>
+              <input type="email" id="email-client" required />
+            </p>
+
+            <p>
+              <label for="telephone-client">Téléphone :</label>
+              <input type="tel" id="telephone-client" required />
+            </p>
+
+            <button type="submit">Enregistrer le client</button>
+          </form>
 
           <table class="tableau">
             <thead>
@@ -49,10 +72,7 @@
       </main>
     </div>
 
-        </div>
-
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
-
-</body>
+  </body>
 </html>
