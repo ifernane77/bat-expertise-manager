@@ -48,9 +48,32 @@ if (listeClients) {
         listeClients.appendChild(ligne);
     }
 
-    // Afficher les clients présents au chargement
-    clients.forEach(function(client) {
-        afficherClient(client);
+        // Récupérer le champ de recherche
+    const rechercheClient =
+        document.getElementById("recherche-client");
+
+    // Actualiser le tableau selon le nom recherché
+    function actualiserListeClients() {
+        const recherche = rechercheClient.value.trim().toLowerCase();
+
+        const clientsFiltres = clients.filter(function(client) {
+            return client.nom.toLowerCase().includes(recherche);
+        });
+
+        // Vider les anciennes lignes avant de reconstruire l'affichage
+        listeClients.textContent = "";
+
+        clientsFiltres.forEach(function(client) {
+            afficherClient(client);
+        });
+    }
+
+    // Afficher les clients au chargement
+    actualiserListeClients();
+
+        // Actualiser les résultats quand la saisie change
+    rechercheClient.addEventListener("input", function() {
+        actualiserListeClients();
     });
 
         // Récupérer le bouton et le formulaire
@@ -95,9 +118,9 @@ if (listeClients) {
             telephone: telephone
         };
 
-        // Ajouter le client aux données et à l'affichage
+        // Ajouter le client puis actualiser les résultats
         clients.push(nouveauClient);
-        afficherClient(nouveauClient);
+        actualiserListeClients();
 
         // Vider et masquer le formulaire
         formulaireClient.reset();
