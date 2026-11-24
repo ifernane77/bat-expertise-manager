@@ -27,7 +27,38 @@ const listeClients = document.getElementById("liste-clients");
 
 // Vérifier si nous sommes sur la page Clients
 if (listeClients) {
+    // Charger les clients sauvegardés dans le navigateur
+    try {
+        const sauvegarde = localStorage.getItem("bat-expertise-clients");
 
+        if (sauvegarde !== null) {
+            const clientsSauvegardes = JSON.parse(sauvegarde);
+
+            if (Array.isArray(clientsSauvegardes)) {
+                clients = clientsSauvegardes;
+            }
+        }
+    } catch (erreur) {
+        console.warn(
+            "Lecture de la sauvegarde impossible : clients initiaux conservés.",
+            erreur
+        );
+    }
+
+        // Sauvegarder le tableau complet des clients
+    function sauvegarderClients() {
+        try {
+            const sauvegarde = JSON.stringify(clients);
+            localStorage.setItem("bat-expertise-clients", sauvegarde);
+        } catch (erreur) {
+            console.warn("Sauvegarde des clients impossible.", erreur);
+
+            alert(
+                "Le client est ajouté pour cette session, " +
+                "mais sa sauvegarde dans le navigateur a échoué."
+            );
+        }
+    }
         // Construire et afficher la ligne d'un client
     function afficherClient(client) {
         const ligne = document.createElement("tr");
@@ -118,8 +149,9 @@ if (listeClients) {
             telephone: telephone
         };
 
-        // Ajouter le client puis actualiser les résultats
+        // Ajouter, sauvegarder puis actualiser les résultats
         clients.push(nouveauClient);
+        sauvegarderClients();
         actualiserListeClients();
 
         // Vider et masquer le formulaire
