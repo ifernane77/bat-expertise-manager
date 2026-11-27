@@ -54,7 +54,7 @@ if (listeClients) {
             console.warn("Sauvegarde des clients impossible.", erreur);
 
             alert(
-                "Le client est ajouté pour cette session, " +
+                "La modification est appliquée pour cette session, " +
                 "mais sa sauvegarde dans le navigateur a échoué."
             );
         }
@@ -75,6 +75,35 @@ if (listeClients) {
             cellule.textContent = valeur;
             ligne.appendChild(cellule);
         });
+
+        // Créer la cellule des actions
+        const celluleActions = document.createElement("td");
+
+        const boutonSupprimer = document.createElement("button");
+        boutonSupprimer.type = "button";
+        boutonSupprimer.textContent = "Supprimer";
+
+        // Demander confirmation avant la suppression
+        boutonSupprimer.addEventListener("click", function() {
+            const confirmation = confirm(
+                "Supprimer le client « " + client.nom + " » ?"
+            );
+
+            if (!confirmation) {
+                return;
+            }
+
+            // Conserver tous les clients sauf celui sélectionné
+            clients = clients.filter(function(clientExistant) {
+                return clientExistant.id !== client.id;
+            });
+
+            sauvegarderClients();
+            actualiserListeClients();
+        });
+
+        celluleActions.appendChild(boutonSupprimer);
+        ligne.appendChild(celluleActions);
 
         listeClients.appendChild(ligne);
     }
@@ -141,9 +170,18 @@ if (listeClients) {
             return;
         }
 
+        // Chercher le plus grand identifiant existant
+        let dernierId = 0;
+
+        clients.forEach(function(client) {
+            if (client.id > dernierId) {
+                dernierId = client.id;
+            }
+        });
+
         // Préparer le nouveau client
         const nouveauClient = {
-            id: clients.length + 1,
+            id: dernierId + 1,
             nom: nom,
             email: email,
             telephone: telephone
