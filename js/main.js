@@ -79,6 +79,26 @@ if (listeClients) {
         // Créer la cellule des actions
         const celluleActions = document.createElement("td");
 
+        // Ouvrir le formulaire avec les valeurs du client
+        const boutonModifier = document.createElement("button");
+        boutonModifier.type = "button";
+        boutonModifier.textContent = "Modifier";
+
+        boutonModifier.addEventListener("click", function() {
+            idClientEnModification = client.id;
+
+            document.getElementById("nom-client").value = client.nom;
+            document.getElementById("email-client").value = client.email;
+            document.getElementById("telephone-client").value =
+                client.telephone;
+
+            titreFormulaireClient.textContent = "Modifier un client";
+            formulaireClient.hidden = false;
+            document.getElementById("nom-client").focus();
+        });
+
+        celluleActions.appendChild(boutonModifier);
+
         const boutonSupprimer = document.createElement("button");
         boutonSupprimer.type = "button";
         boutonSupprimer.textContent = "Supprimer";
@@ -143,8 +163,33 @@ if (listeClients) {
     const formulaireClient =
         document.getElementById("formulaire-client");
 
+    const titreFormulaireClient =
+        document.getElementById("titre-formulaire-client");
+
+    const boutonAnnulerClient =
+        document.getElementById("annuler-client");
+
+    // null signifie qu'aucun client n'est en cours de modification
+    let idClientEnModification = null;
+
+    // Fermer le formulaire et revenir au mode ajout
+    function fermerFormulaireClient() {
+        formulaireClient.reset();
+        formulaireClient.hidden = true;
+        idClientEnModification = null;
+        titreFormulaireClient.textContent = "Nouveau client";
+        boutonAjouterClient.focus();
+    }
+
+    boutonAnnulerClient.addEventListener("click", function() {
+        fermerFormulaireClient();
+    });
+
     // Afficher le formulaire au clic
     boutonAjouterClient.addEventListener("click", function() {
+        idClientEnModification = null;
+        formulaireClient.reset();
+        titreFormulaireClient.textContent = "Nouveau client";
         formulaireClient.hidden = false;
         document.getElementById("nom-client").focus();
     });
@@ -170,34 +215,46 @@ if (listeClients) {
             return;
         }
 
-        // Chercher le plus grand identifiant existant
-        let dernierId = 0;
+        if (idClientEnModification !== null) {
+            // Retrouver le client à modifier grâce à son identifiant
+            const clientAModifier = clients.find(function(client) {
+                return client.id === idClientEnModification;
+            });
 
-        clients.forEach(function(client) {
-            if (client.id > dernierId) {
-                dernierId = client.id;
+            // Le client peut avoir été supprimé pendant l'édition
+            if (!clientAModifier) {
+                alert("Ce client n'existe plus.");
+                fermerFormulaireClient();
+                return;
             }
-        });
 
-        // Préparer le nouveau client
-        const nouveauClient = {
-            id: dernierId + 1,
-            nom: nom,
-            email: email,
-            telephone: telephone
-        };
+            clientAModifier.nom = nom;
+            clientAModifier.email = email;
+            clientAModifier.telephone = telephone;
+        } else {
+            // Préparer l'identifiant du nouveau client
+            let dernierId = 0;
 
-        // Ajouter, sauvegarder puis actualiser les résultats
-        clients.push(nouveauClient);
+            clients.forEach(function(client) {
+                if (client.id > dernierId) {
+                    dernierId = client.id;
+                }
+            });
+
+            const nouveauClient = {
+                id: dernierId + 1,
+                nom: nom,
+                email: email,
+                telephone: telephone
+            };
+
+            clients.push(nouveauClient);
+        }
+
+        // Sauvegarder l'ajout ou la modification
         sauvegarderClients();
         actualiserListeClients();
-
-        // Vider et masquer le formulaire
-        formulaireClient.reset();
-        formulaireClient.hidden = true;
-
-        // Revenir au bouton d'ajout
-        boutonAjouterClient.focus();
+        fermerFormulaireClient();
     });
 
 }
